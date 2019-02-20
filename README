@@ -1,1 +1,6 @@
 //SE 300 Code Repository
+
+//Manager runs the game PONG
+//Manager has a Ball, as well as 2 instances of Paddle
+//Algm 1 is a deep learning algorithm that will be able to play against a user and learn from the user's movements
+//Iterations of the AI will be tracked using the Iteration Tracker
