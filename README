@@ -2,5 +2,11 @@
 
 //Manager runs the game PONG
 //Manager has a Ball, as well as 2 instances of Paddle
+//GUIManager includes the start method and sets the stage
+//MainMenu creates the start up menu for pong and has setOnActions for pressing all the menu buttons that lead to each individual class
+//InstructionsOptions creates a method for the HelpPage
+//HelpPage includes the instructions for pong and utiliezes the InstrucitonsOptions method
+//GamePage will tie the front-end to the back-end
+//ScorePage will track the high scores from each game
 //Algm 1 is a deep learning algorithm that will be able to play against a user and learn from the user's movements
 //Iterations of the AI will be tracked using the Iteration Tracker
