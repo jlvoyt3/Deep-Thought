@@ -7,6 +7,10 @@
 //InstructionsOptions creates a method for the HelpPage
 //HelpPage includes the instructions for pong and utiliezes the InstrucitonsOptions method
 //GamePage will tie the front-end to the back-end
+//Paddle creates the paddles and their movements for the game
+//IterationTracker tracks each iteration of the AI's learning algorithim
+//Ball creates the ball and its movements for the game
+//Difficulty creates the different difficulties for the game wich changes aspects of the ball and paddle
 //ScorePage will track the high scores from each game
 //Algm 1 is a deep learning algorithm that will be able to play against a user and learn from the user's movements
 //Iterations of the AI will be tracked using the Iteration Tracker
