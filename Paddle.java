@@ -1,3 +1,11 @@
+/*
+""" Title: Pong Game in Java
+Author: Lazy Sloth 13
+Date: June 9, 2013
+Code Version: 1.0
+Availability: http://interactivepython.org/runestone/static/StudentCSP/CSPCreativity/referencing.html
+*/
+
 import java.awt.Rectangle;
 import java.awt.Graphics;
 
