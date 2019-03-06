@@ -47,9 +47,9 @@ public class InstructionsOptions {
 				+ "Player vs Player will be the user playing against another user. AI vs AI will be 2 AI’s playing against each other.\n\n"
 
 				+ "DIFFICULTY: The difficulty option determines the speed of the ball and the size of the paddles.\n"
-				+ "Easy:\n"
-				+ "Medium:\n"
-				+ "Hard\n\n"
+				+ "Easy: Normal ball speed and normal paddle size.\n"
+				+ "Medium: Faster ball speed and normal paddle size.\n"
+				+ "Hard: Faster ball speed and smaller paddle size.\n\n"
 
 				+ "SCORING: A player scores when the ball goes past their opponents paddle into the Score Zone.\n";
 
