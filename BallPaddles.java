@@ -27,7 +27,7 @@ public class BallPaddles extends Application{
 	Text score2;
 	AnimationTimer timer;
 	private final int WIDTH = 1000, HEIGHT = 400;
-	int speedX = 5, speedY = 5, dx = speedX, dy = speedY, scorePlayer1 = 0, scorePlayer2 = 0;
+	int speedX = 5, speedY = 5, dx = speedX, dy = speedY, scorePlayer1 = 0, scorePlayer2 = 0, winner = 0;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception{
@@ -157,6 +157,7 @@ public class BallPaddles extends Application{
 			win1.setLayoutY(200);
 			win1.setText("Player 1 wins!");
 			root.getChildren().add(win1);
+			winner = 1;
 		}
 		if (scorePlayer2 == 10) {
 			root.getChildren().removeAll(ball, score1, score2, player1, player2);
@@ -166,6 +167,7 @@ public class BallPaddles extends Application{
 			win2.setLayoutY(200);
 			win2.setText("Player 2 wins!");
 			root.getChildren().add(win2);
+			winner = 2;
 		}
 		
 	}
