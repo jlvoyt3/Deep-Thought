@@ -148,8 +148,10 @@ public class BallPaddles extends Application{
 		
 		//end game
 		if (scorePlayer1 == 10) {
-			ball.setLayoutX(400);
-			ball.setLayoutY(300);
+			player1.setLayoutY(HEIGHT/2-40);
+			player2.setLayoutY(HEIGHT/2-40);
+			ball.setLayoutX(WIDTH/2);
+			ball.setLayoutY(HEIGHT/2);
 			speedX = 0;
 			speedY = 0;
 			root.getChildren().removeAll(ball, score1, score2, player1, player2);
@@ -162,8 +164,10 @@ public class BallPaddles extends Application{
 			winner = 1;
 		}
 		if (scorePlayer2 == 10) {
-			ball.setLayoutX(400);
-			ball.setLayoutY(300);
+			player1.setLayoutY(HEIGHT/2-40);
+			player2.setLayoutY(HEIGHT/2-40);
+			ball.setLayoutX(WIDTH/2);
+			ball.setLayoutY(HEIGHT/2);
 			speedX = 0;
 			speedY = 0;
 			root.getChildren().removeAll(ball, score1, score2, player1, player2);
