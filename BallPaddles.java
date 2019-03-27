@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 
 public class BallPaddles extends Application{
 	
+	Stage primaryStage;
 	Pane root;
 	Rectangle player1,player2;
 	Circle ball;
@@ -26,13 +27,12 @@ public class BallPaddles extends Application{
 	Text score2;
 	AnimationTimer timer;
 	private final int WIDTH = 1000, HEIGHT = 400;
-	private int speedX = 5, speedY = 5, dx = speedX, dy = speedY, scorePlayer1 = 0, scorePlayer2 = 0;
-	
+	int speedX = 5, speedY = 5, dx = speedX, dy = speedY, scorePlayer1 = 0, scorePlayer2 = 0;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception{
 		
-		primaryStage.setTitle("pong");
+		primaryStage.setTitle("Pong Game");
 		primaryStage.setScene(new Scene(createContent()));
 		primaryStage.show();
 		primaryStage.getScene().setOnKeyPressed(event ->{
@@ -49,7 +49,6 @@ public class BallPaddles extends Application{
 				player1.setLayoutY(player1.getLayoutY()+30);
 			}
 		});
-	
 	}
 	
 	private Parent createContent() {
@@ -73,12 +72,12 @@ public class BallPaddles extends Application{
 		ball.setLayoutY(HEIGHT/2);
 		
 		score1 = new Text();
-		score1.setLayoutX(800);
+		score1.setLayoutX(300);
 		score1.setLayoutY(300);
 		score1.setText("0");
 		
 		score2 = new Text();
-		score2.setLayoutX(300);
+		score2.setLayoutX(800);
 		score2.setLayoutY(300);
 		score2.setText("0");
 		
@@ -96,6 +95,7 @@ public class BallPaddles extends Application{
 		return root;
 	}
 	private void gameUpdate() {	
+		
 		double x = ball.getLayoutX(), y = ball.getLayoutY();
 		
 		if (x <=10 && x > -10 && y > player1.getLayoutY() && y < player1.getLayoutY()+80) {
@@ -149,10 +149,33 @@ public class BallPaddles extends Application{
 		ball.setLayoutX(ball.getLayoutX()+dx);
 		ball.setLayoutY(ball.getLayoutY()+dy);
 		
+		if (scorePlayer1 == 10) {
+			root.getChildren().removeAll(ball, score1, score2, player1, player2);
+			Text win1 = new Text();
+			win1.setLayoutX(450);
+			win1.setWrappingWidth(100);
+			win1.setLayoutY(200);
+			win1.setText("Player 1 wins!");
+			root.getChildren().add(win1);
+		}
+		if (scorePlayer2 == 10) {
+			root.getChildren().removeAll(ball, score1, score2, player1, player2);
+			Text win2 = new Text();
+			win2.setLayoutX(450);
+			win2.setWrappingWidth(100);
+			win2.setLayoutY(200);
+			win2.setText("Player 2 wins!");
+			root.getChildren().add(win2);
+		}
+		
 	}
-	public void score() {
-		
-		
+	
+	public int getScore1(int scorePlayer1) {
+		return scorePlayer1;
+	}
+	
+	public int getScore2(int scorePlayer2) {
+		return scorePlayer2;
 	}
 	
 	public static void main(String[] args) { 
