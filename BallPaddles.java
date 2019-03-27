@@ -146,10 +146,12 @@ public class BallPaddles extends Application{
 			dy = -speedY;
 		}
 		
-		ball.setLayoutX(ball.getLayoutX()+dx);
-		ball.setLayoutY(ball.getLayoutY()+dy);
-		
+		//end game
 		if (scorePlayer1 == 10) {
+			ball.setLayoutX(400);
+			ball.setLayoutY(300);
+			speedX = 0;
+			speedY = 0;
 			root.getChildren().removeAll(ball, score1, score2, player1, player2);
 			Text win1 = new Text();
 			win1.setLayoutX(450);
@@ -160,6 +162,10 @@ public class BallPaddles extends Application{
 			winner = 1;
 		}
 		if (scorePlayer2 == 10) {
+			ball.setLayoutX(400);
+			ball.setLayoutY(300);
+			speedX = 0;
+			speedY = 0;
 			root.getChildren().removeAll(ball, score1, score2, player1, player2);
 			Text win2 = new Text();
 			win2.setLayoutX(450);
@@ -169,6 +175,11 @@ public class BallPaddles extends Application{
 			root.getChildren().add(win2);
 			winner = 2;
 		}
+		
+		ball.setLayoutX(ball.getLayoutX()+dx);
+		ball.setLayoutY(ball.getLayoutY()+dy);
+		
+		
 		
 	}
 	
