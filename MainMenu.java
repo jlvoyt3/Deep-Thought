@@ -172,7 +172,7 @@ public class MainMenu extends Pane {
 		 * create and format combo box/drop down box to choose game type
 		 */
 		final ComboBox<String> pickPlayers = new ComboBox<String>();
-		pickPlayers.getItems().addAll("Player VS AI","Player VS Player","AI VS AI");
+		pickPlayers.getItems().addAll("Player VS AI","Player VS Player");
 		pickPlayers.setLayoutX(50);
 		pickPlayers.setLayoutY(300);
 		pickPlayers.setPromptText("Choose Game Type");
@@ -190,7 +190,7 @@ public class MainMenu extends Pane {
 		 * create and format combo box/drop down box to choose AI
 		 */
 		final ComboBox<String> pickAI = new ComboBox<String>();
-		pickAI.getItems().addAll("AI Jerry","AI Fred","AI Chad");
+		pickAI.getItems().addAll("Classic Pong AI","Deep Learning");
 		pickAI.setLayoutX(450);
 		pickAI.setLayoutY(300);
 		pickAI.setPromptText("Choose AI");
