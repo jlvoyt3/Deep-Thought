@@ -1,4 +1,3 @@
-package thepackage;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -25,11 +24,7 @@ import javafx.util.Duration;
  */
 public class MainMenu extends Application {
 
-	//change size of panes
-	
 	//
-	
-	
 	Rectangle player1,player2,lowerBorder,lowerColor;
 	Circle ball;
 	Text score1;
@@ -208,13 +203,13 @@ public class MainMenu extends Application {
 			//stage.show();
 			mainScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 				public void handle(KeyEvent ke) {
-					if (ke.getCode() == KeyCode.W && player1.getLayoutY() > 30) {
+					if (ke.getCode() == KeyCode.W && player1.getLayoutY() > 1) {
 						player1.setLayoutY(player1.getLayoutY() - 30);
 					}
 					if (ke.getCode() == KeyCode.S && player1.getLayoutY() < 320) {
 						player1.setLayoutY(player1.getLayoutY() + 30);
 					}
-					if (ke.getCode() == KeyCode.UP && player2.getLayoutY() > 30) {
+					if (ke.getCode() == KeyCode.UP && player2.getLayoutY() > 1) {
 						player2.setLayoutY(player2.getLayoutY() - 30);
 					}
 					if (ke.getCode() == KeyCode.DOWN  && player2.getLayoutY() < 320) {
