@@ -1,6 +1,3 @@
-package UML_Diagram;
-
-
 /**
  * @author willd
  * @version 1.0
@@ -8,7 +5,7 @@ package UML_Diagram;
  */
 public class Score extends Difficulty {
 
-	private int game type;
+	private int gameType;
 
 	public Score(){
 
@@ -17,7 +14,7 @@ public class Score extends Difficulty {
 	public void finalize() throws Throwable {
 
 	}
-	public void counter display(){
+	public void counterDisplay(){
 
 	}
 
@@ -25,7 +22,7 @@ public class Score extends Difficulty {
 
 	}
 
-	public void file io(){
+	public void fileIO(){
 
 	}
 

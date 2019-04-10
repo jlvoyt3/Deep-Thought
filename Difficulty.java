@@ -1,6 +1,3 @@
-package UML_Diagram;
-
-
 /**
  * @author willd
  * @version 1.0
@@ -15,11 +12,11 @@ public class Difficulty {
 	public void finalize() throws Throwable {
 
 	}
-	public void paddle size(){
+	public void paddleSize(){
 
 	}
 
-	public void speed(){
+	public void ballSpeed(){
 
 	}
 }//end Difficulty

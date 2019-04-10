@@ -1,6 +1,3 @@
-package UML_Diagram;
-
-
 /**
  * @author willd
  * @version 1.0
@@ -8,12 +5,10 @@ package UML_Diagram;
  */
 public class Manager {
 
-	public Ball m_Ball;
-	public Paddle m_Paddle;
 	public Score m_Score;
-	public Algm 1 m_Algm 1;
+	public Algm1 m_Algm1;
 	public Difficulty m_Difficulty;
-	public Instructions m_Instructions;
+	public InstructionsOptions m_InstructionsOptions;
 
 	public Manager(){
 
