@@ -1,12 +1,20 @@
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * @author Hailey
@@ -14,37 +22,36 @@ import javafx.stage.Stage;
  * @created 13-Feb-2019 4:08:00 PM
  * This creates the start menu, options menu, and game menu for the game
  */
-public class MainMenu extends Pane {
+public class MainMenu extends Application {
 
+	//change size of panes
+	
+	//
+	Rectangle player1,player2;
+	Circle ball;
+	Text score1;
+	Text score2;
+	int WIDTH = 1000, HEIGHT = 400;
+	int speedX = 5, speedY = 5, dx = speedX, dy = speedY, scorePlayer1 = 0, scorePlayer2 = 0, winner = 0;
+	//
+	
 	/**
 	 * create the stage for the main menu
 	 */
-	private Stage stage = new Stage();
+	Stage stage = new Stage();
 	/**
 	 * create pane for the main menu
 	 */
-	private Pane pane = new Pane();
-	/**
-	 * create the borderpane the pane is placed into
-	 */
-	private BorderPane borderpane = new BorderPane();
-	/**
-	 * create the pane for the options menu
-	 */
-	private Pane optionPane = new Pane();
-	/**
-	 * create the borderpane the optionPane is placed into
-	 */
-	private BorderPane optionBorderPane = new BorderPane();	
-	/**
-	 * place the optionBorderPane into the scene
-	 */
-	Scene optionScene = new Scene(optionBorderPane, 600, 500);	
+	Pane mainPane = new Pane();
+	Scene mainScene = new Scene(mainPane, 1000, 400);
+	
+	Pane optionsPane = new Pane();
+	Scene optionsScene = new Scene(optionsPane, 500, 400);
+
 	/**
 	 * create Text for the game name
 	 */
 	private Text text = new Text();	
-
 	/**
 	 * create button to start game
 	 */
@@ -63,12 +70,13 @@ public class MainMenu extends Pane {
 	 */
 	public MainMenu() {
 
+		mainPane.setStyle("-fx-background: #161D61");
 		/**
 		 * set details of newGameButton
 		 */
 		newGameButton.setLayoutX(350);
 		newGameButton.setLayoutY(200);
-		newGameButton.setFont( new Font(24));
+		newGameButton.setFont(new Font(24));
 
 		/**
 		 * set details of helpButton
@@ -91,46 +99,12 @@ public class MainMenu extends Pane {
 		text.setLayoutX(175);
 		text.setLayoutY(100);
 		text.setFill(Color.WHITE);
-		text.setFont(new Font(60) );
-
-		/**
-		 * set width and height of main menu scene
-		 */
-		setPrefWidth(900);
-		setPrefHeight(600);
+		text.setFont(new Font(60));
 
 		/**
 		 * add newGameButton, helpButton, scoreButton, and text to the pane
 		 */
-		getChildren().addAll(newGameButton, helpButton, scoreButton, text);
-
-		/**
-		 * format pane and optionPane
-		 */
-		borderpane.setCenter(pane);
-		optionBorderPane.setCenter(optionPane);
-
-		/**
-		 * set action for newGameButton
-		 */
-		newGameButton.setOnAction(e-> {
-			stage.setScene(optionScene);
-			stage.show();
-		});
-
-		/**
-		 * set action for helpButton
-		 */
-		helpButton.setOnAction(e-> {
-			new HelpPage();
-		});
-
-		/**
-		 * set action for scoreButton
-		 */
-		scoreButton.setOnAction(e-> {
-			new ScorePage();
-		});
+		mainPane.getChildren().addAll(newGameButton, helpButton, scoreButton, text);
 
 		/**
 		 * create and format title text for the options menu
@@ -139,7 +113,7 @@ public class MainMenu extends Pane {
 		title.setText("Options");
 		title.setLayoutX(200);
 		title.setLayoutY(150);
-		title.setFont( new Font(60));
+		title.setFont(new Font(60));
 		title.setFill(Color.WHITE);
 
 		/**
@@ -151,7 +125,7 @@ public class MainMenu extends Pane {
 		 * format back button
 		 */
 		backButton.setText("Back");
-		backButton.setFont( new Font(24) );
+		backButton.setFont(new Font(24) );
 		backButton.setLayoutX(200);
 		backButton.setLayoutY(400);
 
@@ -164,15 +138,15 @@ public class MainMenu extends Pane {
 		 * format start button
 		 */
 		startButton.setText("Start Game");
-		startButton.setLayoutX(350);
-		startButton.setLayoutY(400);
-		startButton.setFont( new Font(24));
+		startButton.setLayoutX(500);
+		startButton.setLayoutY(200);
+		startButton.setFont(new Font(24));
 
 		/**
 		 * create and format combo box/drop down box to choose game type
 		 */
 		final ComboBox<String> pickPlayers = new ComboBox<String>();
-		pickPlayers.getItems().addAll("Player VS AI","Player VS Player");
+		pickPlayers.getItems().addAll("Player VS AI","Player VS Player","AI VS AI");
 		pickPlayers.setLayoutX(50);
 		pickPlayers.setLayoutY(300);
 		pickPlayers.setPromptText("Choose Game Type");
@@ -190,35 +164,207 @@ public class MainMenu extends Pane {
 		 * create and format combo box/drop down box to choose AI
 		 */
 		final ComboBox<String> pickAI = new ComboBox<String>();
-		pickAI.getItems().addAll("Classic Pong AI","Deep Learning");
+		pickAI.getItems().addAll("AI Jerry","AI Fred","AI Chad");
 		pickAI.setLayoutX(450);
 		pickAI.setLayoutY(300);
 		pickAI.setPromptText("Choose AI");
 
 		/**
-		 * add features to optionPane and format background
+		 * set action for newGameButton
 		 */
-		optionPane.getChildren().addAll(pickPlayers, pickDifficulty, pickAI, title, startButton);
-		//optionPane.getChildren().add(backButton);
-		optionBorderPane.setStyle("-fx-background: #161D61");
+		newGameButton.setOnAction(e-> {
+			mainPane.getChildren().removeAll(newGameButton, helpButton, scoreButton, text);
+			stage.setScene(optionsScene);
+			
+			mainPane.getChildren().addAll(pickPlayers, pickDifficulty, pickAI, title, startButton);
+		});
 
 		/**
-		 * create and format gamePane, gamePorderPane, gameScene
+		 * set action for helpButton
 		 */
-		Pane gamePane = new Pane();
-		BorderPane gameBorderPane = new BorderPane();
-		gameBorderPane.setCenter(gamePane);
-		Scene gameScene =  new Scene(gameBorderPane, 1000, 850);
+		helpButton.setOnAction(e-> {
+			new HelpPage();
+		});
+
+		/**
+		 * set action for scoreButton
+		 */
+		scoreButton.setOnAction(e-> {
+			new ScorePage();
+		});
 
 		/**
 		 * set action of startButton to display gameScene
 		 */
 		startButton.setOnAction(e->{
-			stage.setScene(gameScene);
+			//ballPaddles.createGame();
+			//
+			mainPane.getChildren().removeAll(pickPlayers, pickDifficulty, pickAI, title, startButton);
+			//
+			mainPane.setOnKeyPressed(new EventHandler<KeyEvent>() {
+				public void handle(KeyEvent ke) {
+					if (ke.getCode() == KeyCode.W && player1.getLayoutX() < 30) {
+						player1.setLayoutY(player1.getLayoutY() + 30);
+					}
+					if (ke.getCode() == KeyCode.S && player1.getLayoutX() < 320) {
+						player1.setLayoutY(player1.getLayoutY() + 30);
+					}
+					if (ke.getCode() == KeyCode.UP && player2.getLayoutY() > 30) {
+						player2.setLayoutY(player2.getLayoutY()-30);
+					}
+					if (ke.getCode() == KeyCode.DOWN  && player2.getLayoutY() < 320) {
+						player2.setLayoutY(player2.getLayoutY()+30);
+					}
+				}
+			});
+
+			mainPane.setMaxSize(WIDTH, HEIGHT);
+			mainPane.setStyle("-fx-background-color: white");
+
+			player1 = new Rectangle(10,80, Color.BLACK);
+			player1.setLayoutX(0);
+			player1.setLayoutY(HEIGHT/2-40);
+
+			player2 = new Rectangle(10,80, Color.BLACK);
+			player2.setLayoutX(WIDTH-10);
+			player2.setLayoutY(HEIGHT/2-40);
+
+			ball = new Circle(5);
+			ball.setFill(Color.BLACK);
+			ball.setLayoutX(WIDTH/2);
+			ball.setLayoutY(HEIGHT/2);
+
+			score1 = new Text();
+			score1.setLayoutX(300);
+			score1.setLayoutY(300);
+			score1.setText("0");
+
+			score2 = new Text();
+			score2.setLayoutX(800);
+			score2.setLayoutY(300);
+			score2.setText("0");
+
+			mainPane.getChildren().addAll(player1,player2,ball,score1,score2);
+
+			Timeline timelineGame = new Timeline();
+			timelineGame.setCycleCount(Timeline.INDEFINITE);
+			KeyFrame keyframeTargets = new KeyFrame(Duration.seconds(.1), action -> {
+				//
+				//gameUpdate
+				double x = ball.getLayoutX(), y = ball.getLayoutY();
+
+				if (x <=10 && x > -10 && y > player1.getLayoutY() && y < player1.getLayoutY()+80) {
+					dx = speedX;
+				} else if (ball.getLayoutX() < -10) {
+					player1.setLayoutY(HEIGHT/2-40);
+					player2.setLayoutY(HEIGHT/2-40);
+					ball.setLayoutX(WIDTH/2);
+					ball.setLayoutY(HEIGHT/2);
+					speedX = 5;
+					speedY = 5;
+					scorePlayer2++;
+
+					//remove old score
+					mainPane.getChildren().remove(score2);
+					//convert score to string
+					String scorePlayer2string = Integer.toString(scorePlayer2);
+					//set text to score
+					score2.setText(scorePlayer2string);
+					//add score to pane
+					mainPane.getChildren().add(score2);
+				}
+
+				if(x >= WIDTH-10 && x < WIDTH+10 && y > player2.getLayoutY() && y< player2.getLayoutY()+80) {
+					speedX++;
+					dx = -speedX;
+				} else if (ball.getLayoutX() > 1010) {
+					player1.setLayoutY(HEIGHT/2-40);
+					player2.setLayoutY(HEIGHT/2-40);
+					ball.setLayoutX(WIDTH/2);
+					ball.setLayoutY(HEIGHT/2);
+					speedX = 5;
+					speedY = 5;
+					scorePlayer1++;
+
+					//remove old score
+					mainPane.getChildren().remove(score1);
+					//convert score to string
+					String scorePlayer1string = Integer.toString(scorePlayer1);
+					//set text to score
+					score1.setText(scorePlayer1string);
+					//add score to pane
+					mainPane.getChildren().add(score1);
+				}
+
+				if(y <= 0) {
+					dy = speedY;
+				}
+
+				if (y >= HEIGHT-5) {
+					dy = -speedY;
+				}
+
+				//end game
+				if (scorePlayer1 == 10) {
+					player1.setLayoutY(HEIGHT/2-40);
+					player2.setLayoutY(HEIGHT/2-40);
+					ball.setLayoutX(WIDTH/2);
+					ball.setLayoutY(HEIGHT/2);
+					speedX = 0;
+					speedY = 0;
+					mainPane.getChildren().removeAll(ball, score1, score2, player1, player2);
+					Text win1 = new Text();
+					win1.setLayoutX(450);
+					win1.setWrappingWidth(100);
+					win1.setLayoutY(200);
+					win1.setText("Player 1 wins!");
+					mainPane.getChildren().add(win1);
+					winner = 1;
+				}
+				if (scorePlayer2 == 10) {
+					player1.setLayoutY(HEIGHT/2-40);
+					player2.setLayoutY(HEIGHT/2-40);
+					ball.setLayoutX(WIDTH/2);
+					ball.setLayoutY(HEIGHT/2);
+					speedX = 0;
+					speedY = 0;
+					mainPane.getChildren().removeAll(ball, score1, score2, player1, player2);
+					Text win2 = new Text();
+					win2.setLayoutX(450);
+					win2.setWrappingWidth(100);
+					win2.setLayoutY(200);
+					win2.setText("Player 2 wins!");
+					mainPane.getChildren().add(win2);
+					winner = 2;
+				}
+
+				ball.setLayoutX(ball.getLayoutX()+dx);
+				ball.setLayoutY(ball.getLayoutY()+dy);
+				//
+				//
+			});
+			timelineGame.getKeyFrames().add(keyframeTargets);
+			timelineGame.play();
+			//
 		});
 
 		//backButton.setOnAction(e->{
 		//	stage.setScene(optionScene);
 		//});
+	}
+
+	/**
+	 * Start method for the program that titles and displays the stage
+	 */
+	public void start(Stage stage) {
+
+		stage.setScene(mainScene);
+		stage.setTitle("Deep Learning Pong");
+		stage.show();
+
+	}
+
+	public static void main(String[] args) {
+		launch(args);
 	}
 }
