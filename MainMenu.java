@@ -1,3 +1,4 @@
+package thepackage;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -27,12 +28,14 @@ public class MainMenu extends Application {
 	//change size of panes
 	
 	//
-	Rectangle player1,player2;
+	
+	
+	Rectangle player1,player2,lowerBorder,lowerColor;
 	Circle ball;
 	Text score1;
 	Text score2;
 	int WIDTH = 1000, HEIGHT = 400;
-	int speedX = 5, speedY = 5, dx = speedX, dy = speedY, scorePlayer1 = 0, scorePlayer2 = 0, winner = 0;
+	int speedX = 10, speedY = 10, dx = speedX, dy = speedY, scorePlayer1 = 0, scorePlayer2 = 0, winner = 0;
 	//
 	
 	/**
@@ -43,10 +46,10 @@ public class MainMenu extends Application {
 	 * create pane for the main menu
 	 */
 	Pane mainPane = new Pane();
-	Scene mainScene = new Scene(mainPane, 1000, 400);
+	Scene mainScene = new Scene(mainPane, 1000, 600);
 	
 	Pane optionsPane = new Pane();
-	Scene optionsScene = new Scene(optionsPane, 500, 400);
+
 
 	/**
 	 * create Text for the game name
@@ -55,7 +58,7 @@ public class MainMenu extends Application {
 	/**
 	 * create button to start game
 	 */
-	private Button newGameButton = new Button("Start Game");
+	private Button startButton = new Button("Start Game");
 	/**
 	 * create button for the help menu
 	 */
@@ -70,13 +73,13 @@ public class MainMenu extends Application {
 	 */
 	public MainMenu() {
 
-		mainPane.setStyle("-fx-background: #161D61");
+		mainPane.setStyle("-fx-background: #16A500");
 		/**
 		 * set details of newGameButton
 		 */
-		newGameButton.setLayoutX(350);
-		newGameButton.setLayoutY(200);
-		newGameButton.setFont(new Font(24));
+		startButton.setLayoutX(350);
+		startButton.setLayoutY(200);
+		startButton.setFont(new Font(24));
 
 		/**
 		 * set details of helpButton
@@ -96,7 +99,7 @@ public class MainMenu extends Application {
 		 * set main menu title text
 		 */
 		text.setText("Deep Learning Pong");
-		text.setLayoutX(175);
+		text.setLayoutX(200);
 		text.setLayoutY(100);
 		text.setFill(Color.WHITE);
 		text.setFont(new Font(60));
@@ -104,7 +107,7 @@ public class MainMenu extends Application {
 		/**
 		 * add newGameButton, helpButton, scoreButton, and text to the pane
 		 */
-		mainPane.getChildren().addAll(newGameButton, helpButton, scoreButton, text);
+		mainPane.getChildren().addAll(startButton, helpButton, scoreButton, text);
 
 		/**
 		 * create and format title text for the options menu
@@ -132,15 +135,15 @@ public class MainMenu extends Application {
 		/**
 		 * create start button
 		 */
-		Button startButton = new Button();
+		Button startGameButton = new Button();
 
 		/**
 		 * format start button
 		 */
-		startButton.setText("Start Game");
-		startButton.setLayoutX(500);
-		startButton.setLayoutY(200);
-		startButton.setFont(new Font(24));
+		startGameButton.setText("Start Game");
+		startGameButton.setLayoutX(500);
+		startGameButton.setLayoutY(200);
+		startGameButton.setFont(new Font(24));
 
 		/**
 		 * create and format combo box/drop down box to choose game type
@@ -150,6 +153,7 @@ public class MainMenu extends Application {
 		pickPlayers.setLayoutX(50);
 		pickPlayers.setLayoutY(300);
 		pickPlayers.setPromptText("Choose Game Type");
+
 
 		/**
 		 * create and format combo box/drop down box to choose difficulty
@@ -172,11 +176,12 @@ public class MainMenu extends Application {
 		/**
 		 * set action for newGameButton
 		 */
-		newGameButton.setOnAction(e-> {
-			mainPane.getChildren().removeAll(newGameButton, helpButton, scoreButton, text);
-			stage.setScene(optionsScene);
+		startButton.setOnAction(e-> {
+
 			
-			mainPane.getChildren().addAll(pickPlayers, pickDifficulty, pickAI, title, startButton);
+			mainPane.getChildren().removeAll(startButton, helpButton, scoreButton, text);
+
+			mainPane.getChildren().addAll(pickPlayers, pickDifficulty, pickAI, title, startGameButton);
 		});
 
 		/**
@@ -196,30 +201,39 @@ public class MainMenu extends Application {
 		/**
 		 * set action of startButton to display gameScene
 		 */
-		startButton.setOnAction(e->{
+		startGameButton.setOnAction(e->{
 			//ballPaddles.createGame();
 			//
-			mainPane.getChildren().removeAll(pickPlayers, pickDifficulty, pickAI, title, startButton);
-			//
-			mainPane.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			mainPane.getChildren().removeAll(pickPlayers, pickDifficulty, pickAI, title, startGameButton);
+			//stage.show();
+			mainScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 				public void handle(KeyEvent ke) {
-					if (ke.getCode() == KeyCode.W && player1.getLayoutX() < 30) {
-						player1.setLayoutY(player1.getLayoutY() + 30);
+					if (ke.getCode() == KeyCode.W && player1.getLayoutY() > 30) {
+						player1.setLayoutY(player1.getLayoutY() - 30);
 					}
-					if (ke.getCode() == KeyCode.S && player1.getLayoutX() < 320) {
+					if (ke.getCode() == KeyCode.S && player1.getLayoutY() < 320) {
 						player1.setLayoutY(player1.getLayoutY() + 30);
 					}
 					if (ke.getCode() == KeyCode.UP && player2.getLayoutY() > 30) {
-						player2.setLayoutY(player2.getLayoutY()-30);
+						player2.setLayoutY(player2.getLayoutY() - 30);
 					}
 					if (ke.getCode() == KeyCode.DOWN  && player2.getLayoutY() < 320) {
-						player2.setLayoutY(player2.getLayoutY()+30);
+						player2.setLayoutY(player2.getLayoutY() + 30);
 					}
 				}
 			});
 
 			mainPane.setMaxSize(WIDTH, HEIGHT);
-			mainPane.setStyle("-fx-background-color: white");
+			mainPane.setStyle("-fx-background-color: #86DB64");
+			
+			
+			lowerColor = new Rectangle(1000,200, Color.GREEN);
+			lowerColor.setLayoutX(0);
+			lowerColor.setLayoutY(405);
+			
+			lowerBorder = new Rectangle(1000,10, Color.BLACK);
+			lowerBorder.setLayoutX(0);
+			lowerBorder.setLayoutY(400);
 
 			player1 = new Rectangle(10,80, Color.BLACK);
 			player1.setLayoutX(0);
@@ -244,11 +258,11 @@ public class MainMenu extends Application {
 			score2.setLayoutY(300);
 			score2.setText("0");
 
-			mainPane.getChildren().addAll(player1,player2,ball,score1,score2);
+			mainPane.getChildren().addAll(player1,player2,ball,score1,score2,lowerBorder,lowerColor);
 
 			Timeline timelineGame = new Timeline();
 			timelineGame.setCycleCount(Timeline.INDEFINITE);
-			KeyFrame keyframeTargets = new KeyFrame(Duration.seconds(.1), action -> {
+			KeyFrame keyframeTargets = new KeyFrame(Duration.seconds(.08), action -> {
 				//
 				//gameUpdate
 				double x = ball.getLayoutX(), y = ball.getLayoutY();
@@ -260,8 +274,8 @@ public class MainMenu extends Application {
 					player2.setLayoutY(HEIGHT/2-40);
 					ball.setLayoutX(WIDTH/2);
 					ball.setLayoutY(HEIGHT/2);
-					speedX = 5;
-					speedY = 5;
+					speedX = 10;
+					speedY = 10;
 					scorePlayer2++;
 
 					//remove old score
@@ -282,8 +296,8 @@ public class MainMenu extends Application {
 					player2.setLayoutY(HEIGHT/2-40);
 					ball.setLayoutX(WIDTH/2);
 					ball.setLayoutY(HEIGHT/2);
-					speedX = 5;
-					speedY = 5;
+					speedX = 10;
+					speedY = 10;
 					scorePlayer1++;
 
 					//remove old score
