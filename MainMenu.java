@@ -33,11 +33,13 @@ public class MainMenu extends Application {
 
 
 	Rectangle player1,player2,lowerBorder,lowerColor;
+	// paddle size
+	int paddleHeight = 80;
 	Circle ball;
 	Text score1;
 	Text score2;
 	int WIDTH = 1000, HEIGHT = 400;
-	int speedX = 40, speedY = 40, dx = speedX, dy = speedY, scorePlayer1 = 0, scorePlayer2 = 0, winner = 0;
+	int speedX = 0, speedY = 0, dx = speedX, dy = speedY, scorePlayer1 = 0, scorePlayer2 = 0, winner = 0;
 	//
 
 	/**
@@ -242,15 +244,29 @@ public class MainMenu extends Application {
 				
 				if (pickDifficulty.getValue() == "Easy") {
 					playDifficulty = 1;
-					System.out.println(playDifficulty);
+					speedX = 10;
+					speedY = 10;
+					dx = speedX;
+					dy = speedY;
+					System.out.println(playDifficulty + " " + speedX + " " + speedY);
 				} else if (pickDifficulty.getValue() == "Medium") {
 					playDifficulty = 2;
+					speedX = 15;
+					speedY = 15;
+					dx = speedX;
+					dy = speedY;
+					System.out.println(playDifficulty + " " + speedX + " " + speedY);
 					System.out.println(playDifficulty);
 				} else if (pickDifficulty.getValue() == "Hard") {
 					playDifficulty = 3;
+					speedX = 20;
+					speedY = 20;
+					dx = speedX;
+					dy = speedY;
+					System.out.println(playDifficulty + " " + speedX + " " + speedY);
 					System.out.println(playDifficulty);
 				}
-				
+				 
 				mainPane.getChildren().removeAll(pickPlayers, pickDifficulty, title, startGameButton);
 
 				mainScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -282,11 +298,24 @@ public class MainMenu extends Application {
 				lowerBorder.setLayoutX(0);
 				lowerBorder.setLayoutY(400);
 
-				player1 = new Rectangle(10,80, Color.BLACK);
+
+
+				if (playDifficulty == 1) {
+					paddleHeight = 80;
+					
+				} else if (playDifficulty == 2) {
+					paddleHeight = 60;
+					
+				} else if (playDifficulty == 3) {
+					paddleHeight = 40;
+				}
+
+				player1 = new Rectangle(10,paddleHeight, Color.BLACK);
+				player2 = new Rectangle(10,paddleHeight, Color.BLACK);
+				
 				player1.setLayoutX(0);
 				player1.setLayoutY(HEIGHT/2-40);
-
-				player2 = new Rectangle(10,80, Color.BLACK);
+				
 				player2.setLayoutX(WIDTH-10);
 				player2.setLayoutY(HEIGHT/2-40);
 
@@ -308,8 +337,12 @@ public class MainMenu extends Application {
 				score2.setFont(new Font(20));
 				score2.setText("Player 2's Score: 0");
 				score2.setWrappingWidth(158);
+				
+				helpButton.setLayoutX(425);
+				helpButton.setLayoutY(450);
+				
 
-				mainPane.getChildren().addAll(player1,player2,ball,lowerBorder,lowerColor,score1,score2);
+				mainPane.getChildren().addAll(player1,player2,ball,lowerBorder,lowerColor,score1,score2,helpButton);
 
 				Timeline timelineGame = new Timeline();
 				timelineGame.setCycleCount(Timeline.INDEFINITE);
@@ -361,7 +394,7 @@ public class MainMenu extends Application {
 						mainPane.getChildren().add(score1);
 					}
 
-					if(y <= 0) {
+					if (y <= 0) {
 						dy = speedY;
 					}
 
@@ -377,7 +410,7 @@ public class MainMenu extends Application {
 						ball.setLayoutY(HEIGHT/2);
 						speedX = 0;
 						speedY = 0;
-						mainPane.getChildren().removeAll(ball, score1, score2, player1, player2);
+						mainPane.getChildren().removeAll(ball, score1, score2, player1, player2, helpButton);
 						Text win1 = new Text();
 	                    win1.setLayoutX(400);
 	                    win1.setLayoutY(200);
@@ -394,7 +427,7 @@ public class MainMenu extends Application {
 						ball.setLayoutY(HEIGHT/2);
 						speedX = 0;
 						speedY = 0;
-						mainPane.getChildren().removeAll(ball, score1, score2, player1, player2);
+						mainPane.getChildren().removeAll(ball, score1, score2, player1, player2, helpButton);
 						Text win2 = new Text();
 	                    win2.setLayoutX(400);
 	                    win2.setLayoutY(200);
