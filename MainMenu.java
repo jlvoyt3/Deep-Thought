@@ -1,11 +1,8 @@
-package thepackage;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
@@ -20,7 +17,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- * @author Hailey
+ * @author Hailey, Justin
  * @version 1.0
  * @created 13-Feb-2019 4:08:00 PM
  * This creates the start menu, options menu, and game menu for the game
@@ -31,13 +28,13 @@ public class MainMenu extends Application {
 
 	//
 
-
 	Rectangle player1,player2,lowerBorder,lowerColor;
 	// paddle size
 	int paddleHeight = 80;
 	Circle ball;
 	Text score1;
 	Text score2;
+	int playStyle = 0;
 	int WIDTH = 1000, HEIGHT = 400;
 	int speedX = 0, speedY = 0, dx = speedX, dy = speedY, scorePlayer1 = 0, scorePlayer2 = 0, winner = 0;
 	//
@@ -225,9 +222,6 @@ public class MainMenu extends Application {
 				AlertBox.display("Error", "You must set your options before the game begins.");
 				
 			} else {
-
-				
-				int playStyle = 0;
 				
 				if (pickPlayers.getValue() == "Player VS Player") {
 					playStyle = 1;
@@ -451,6 +445,11 @@ public class MainMenu extends Application {
 		//backButton.setOnAction(e->{
 		//	stage.setScene(optionScene);
 		//});
+	}
+	
+	public int getPlayStyle() {
+		//get game type
+		return playStyle;
 	}
 
 	/**
