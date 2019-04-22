@@ -2,9 +2,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
@@ -228,13 +226,10 @@ public class MainMenu extends Application {
 				
 				if (pickPlayers.getValue() == "Player VS Player") {
 					setPlayStyle(1);
-					System.out.println("Playstyle = "+playStyle);
 				} else if (pickPlayers.getValue() == "Player VS Traditional AI") {
 					setPlayStyle(2);
-					System.out.println("Playstyle = "+playStyle);
 				} else if (pickPlayers.getValue() == "Player VS Deep Learning AI") {
 					setPlayStyle(3);
-					System.out.println("Playstyle = "+playStyle);
 				}
 				
 				int playDifficulty = 0;
@@ -245,25 +240,20 @@ public class MainMenu extends Application {
 					speedY = 10;
 					dx = speedX;
 					dy = speedY;
-					System.out.println(playDifficulty + " " + speedX + " " + speedY);
 				} else if (pickDifficulty.getValue() == "Medium") {
 					playDifficulty = 2;
 					speedX = 15;
 					speedY = 15;
 					dx = speedX;
 					dy = speedY;
-					System.out.println(playDifficulty + " " + speedX + " " + speedY);
-					System.out.println(playDifficulty);
 				} else if (pickDifficulty.getValue() == "Hard") {
 					playDifficulty = 3;
 					speedX = 20;
 					speedY = 20;
 					dx = speedX;
 					dy = speedY;
-					System.out.println(playDifficulty + " " + speedX + " " + speedY);
-					System.out.println(playDifficulty);
 				}
-				 
+				
 				mainPane.getChildren().removeAll(pickPlayers, pickDifficulty, title, startGameButton);
 
 				if (playStyle == 1) { //starts full controls for pvp
@@ -352,6 +342,8 @@ public class MainMenu extends Application {
 				helpButton.setLayoutY(450);
 
 				mainPane.getChildren().addAll(player1,player2,ball,lowerBorder,lowerColor,score1,score2,helpButton);
+				
+				displayGameTime();
 
 				Timeline timelineGame = new Timeline();
 				timelineGame.setCycleCount(Timeline.INDEFINITE);
@@ -464,10 +456,6 @@ public class MainMenu extends Application {
 				timelineGame.play();
 				//
 			}});
-
-		//backButton.setOnAction(e->{
-		//	stage.setScene(optionScene);
-		//});
 	}
 
 	/**
@@ -499,6 +487,31 @@ public class MainMenu extends Application {
 			movement = -10;
 		}
 		return movement;
+	}
+	
+	public void displayGameTime() {
+		
+		//create KeepTime variable
+		KeepTime keepTime = new KeepTime();
+		
+		//create text box for the countdown timer
+		Text time = new Text();
+		time.setLayoutX(435);
+		time.setLayoutY(550);
+		time.setFont(new Font(20));
+		mainPane.getChildren().add(time);
+		//create timeline to keep time
+		Timeline timelineTime = new Timeline();
+		timelineTime.setCycleCount(Timeline.INDEFINITE);
+		KeyFrame keyframeTime = new KeyFrame(Duration.seconds(1), action -> {
+			//update with current time left
+			mainPane.getChildren().removeAll(lowerBorder, lowerColor, score1, score2, helpButton, time);
+			time.setText("Game Time: " + keepTime.countTime());
+			mainPane.getChildren().addAll(lowerBorder, lowerColor, score1, score2, helpButton, time);
+		});
+		timelineTime.getKeyFrames().add(keyframeTime);
+		timelineTime.play();
+		//
 	}
 
 	public static void main(String[] args) {
