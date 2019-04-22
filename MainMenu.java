@@ -2,7 +2,9 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
@@ -17,7 +19,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- * @author Hailey, Justin
+ * @author Hailey
  * @version 1.0
  * @created 13-Feb-2019 4:08:00 PM
  * This creates the start menu, options menu, and game menu for the game
@@ -28,14 +30,15 @@ public class MainMenu extends Application {
 
 	//
 
+
 	Rectangle player1,player2,lowerBorder,lowerColor;
 	// paddle size
 	int paddleHeight = 80;
 	Circle ball;
 	Text score1;
 	Text score2;
-	int playStyle = 0;
 	int WIDTH = 1000, HEIGHT = 400;
+	int playStyle = 0;
 	int speedX = 0, speedY = 0, dx = speedX, dy = speedY, scorePlayer1 = 0, scorePlayer2 = 0, winner = 0;
 	//
 
@@ -224,14 +227,14 @@ public class MainMenu extends Application {
 			} else {
 				
 				if (pickPlayers.getValue() == "Player VS Player") {
-					playStyle = 1;
-					System.out.println(playStyle);
+					setPlayStyle(1);
+					System.out.println("Playstyle = "+playStyle);
 				} else if (pickPlayers.getValue() == "Player VS Traditional AI") {
-					playStyle = 2;
-					System.out.println(playStyle);
+					setPlayStyle(2);
+					System.out.println("Playstyle = "+playStyle);
 				} else if (pickPlayers.getValue() == "Player VS Deep Learning AI") {
-					playStyle = 3;
-					System.out.println(playStyle);
+					setPlayStyle(3);
+					System.out.println("Playstyle = "+playStyle);
 				}
 				
 				int playDifficulty = 0;
@@ -263,7 +266,7 @@ public class MainMenu extends Application {
 				 
 				mainPane.getChildren().removeAll(pickPlayers, pickDifficulty, title, startGameButton);
 
-				if (playStyle ==1) {
+				if (playStyle == 1) { //starts full controls for pvp
 					mainScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 						public void handle(KeyEvent ke) {
 							if (ke.getCode() == KeyCode.W && player1.getLayoutY() > 1) {
@@ -281,7 +284,7 @@ public class MainMenu extends Application {
 						}
 					});
 				}
-				else {
+				else { //starts only w/s controls for pve
 					mainScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 						public void handle(KeyEvent ke) {
 							if (ke.getCode() == KeyCode.W && player1.getLayoutY() > 1) {
@@ -293,7 +296,6 @@ public class MainMenu extends Application {
 						}
 					});
 				}
-
 				mainPane.setMaxSize(WIDTH, HEIGHT);
 				mainPane.setStyle("-fx-background-color: #86DB64");
 
@@ -348,7 +350,6 @@ public class MainMenu extends Application {
 				
 				helpButton.setLayoutX(425);
 				helpButton.setLayoutY(450);
-				
 
 				mainPane.getChildren().addAll(player1,player2,ball,lowerBorder,lowerColor,score1,score2,helpButton);
 
@@ -358,12 +359,15 @@ public class MainMenu extends Application {
 					//
 					//gameUpdate
 					double x = ball.getLayoutX(), y = ball.getLayoutY();
-					
+
 					if (getPlayStyle() == 2) {
 						player2.setLayoutY(MovePaddle(ball.getLayoutY(),player2.getLayoutY())+player2.getLayoutY());
+					}
 					
+					//Move ball
 					if (x <=10 && x > -10 && y > player1.getLayoutY() && y < player1.getLayoutY()+80) {
 						dx = speedX;
+						//Player2 score
 					} else if (ball.getLayoutX() < -10) {
 						player1.setLayoutY(HEIGHT/2-40);
 						player2.setLayoutY(HEIGHT/2-40);
@@ -383,9 +387,11 @@ public class MainMenu extends Application {
 						mainPane.getChildren().add(score2);
 					}
 
+					//Move ball
 					if(x >= WIDTH-10 && x < WIDTH+10 && y > player2.getLayoutY() && y< player2.getLayoutY()+80) {
 						speedX++;
 						dx = -speedX;
+						//Player1 score
 					} else if (ball.getLayoutX() > 1010) {
 						player1.setLayoutY(HEIGHT/2-40);
 						player2.setLayoutY(HEIGHT/2-40);
@@ -463,24 +469,7 @@ public class MainMenu extends Application {
 		//	stage.setScene(optionScene);
 		//});
 	}
-	
-	public int getPlayStyle() {
-		//get game type
-		return playStyle;
-	}
 
-			
-	public double MovePaddle(double ballY, double paddleY) {
-		double movement = 0;
-		if (ballY > paddleY + 15) {
-			movement = 10;
-		}
-		else if (ballY < paddleY + 15) {
-			movement = -10;
-		}
-		return movement;
-	}
-			
 	/**
 	 * Start method for the program that titles and displays the stage
 	 */
@@ -492,6 +481,24 @@ public class MainMenu extends Application {
 		stage.sizeToScene();
 		stage.show();
 
+	}
+	public void setPlayStyle(int x) {
+		playStyle = x;
+	}
+	
+	public int getPlayStyle() {
+		return playStyle;
+	}
+	
+	public double MovePaddle(double ballY, double paddleY) {
+		double movement = 0;
+		if (ballY > paddleY+15) {
+			movement = 10;
+		}
+		else if (ballY < paddleY+15) {
+			movement = -10;
+		}
+		return movement;
 	}
 
 	public static void main(String[] args) {
