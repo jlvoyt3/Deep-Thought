@@ -263,22 +263,36 @@ public class MainMenu extends Application {
 				 
 				mainPane.getChildren().removeAll(pickPlayers, pickDifficulty, title, startGameButton);
 
-				mainScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-					public void handle(KeyEvent ke) {
-						if (ke.getCode() == KeyCode.W && player1.getLayoutY() > 1) {
-							player1.setLayoutY(player1.getLayoutY() - 15);
+				if (playStyle ==1) {
+					mainScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+						public void handle(KeyEvent ke) {
+							if (ke.getCode() == KeyCode.W && player1.getLayoutY() > 1) {
+								player1.setLayoutY(player1.getLayoutY() - 15);
+							}
+							if (ke.getCode() == KeyCode.S && player1.getLayoutY() < 320) {
+								player1.setLayoutY(player1.getLayoutY() + 15);
+							}
+							if (ke.getCode() == KeyCode.UP && player2.getLayoutY() > 1) {
+								player2.setLayoutY(player2.getLayoutY() - 15);
+							}
+							if (ke.getCode() == KeyCode.DOWN  && player2.getLayoutY() < 320) {
+								player2.setLayoutY(player2.getLayoutY() + 15);
+							}
 						}
-						if (ke.getCode() == KeyCode.S && player1.getLayoutY() < 320) {
-							player1.setLayoutY(player1.getLayoutY() + 15);
+					});
+				}
+				else {
+					mainScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+						public void handle(KeyEvent ke) {
+							if (ke.getCode() == KeyCode.W && player1.getLayoutY() > 1) {
+								player1.setLayoutY(player1.getLayoutY() - 15);
+							}
+							if (ke.getCode() == KeyCode.S && player1.getLayoutY() < 320) {
+								player1.setLayoutY(player1.getLayoutY() + 15);
+							}
 						}
-						if (ke.getCode() == KeyCode.UP && player2.getLayoutY() > 1) {
-							player2.setLayoutY(player2.getLayoutY() - 15);
-						}
-						if (ke.getCode() == KeyCode.DOWN  && player2.getLayoutY() < 320) {
-							player2.setLayoutY(player2.getLayoutY() + 15);
-						}
-					}
-				});
+					});
+				}
 
 				mainPane.setMaxSize(WIDTH, HEIGHT);
 				mainPane.setStyle("-fx-background-color: #86DB64");
@@ -344,7 +358,10 @@ public class MainMenu extends Application {
 					//
 					//gameUpdate
 					double x = ball.getLayoutX(), y = ball.getLayoutY();
-
+					
+					if (getPlayStyle() == 2) {
+						player2.setLayoutY(MovePaddle(ball.getLayoutY(),player2.getLayoutY())+player2.getLayoutY());
+					
 					if (x <=10 && x > -10 && y > player1.getLayoutY() && y < player1.getLayoutY()+80) {
 						dx = speedX;
 					} else if (ball.getLayoutX() < -10) {
@@ -452,6 +469,18 @@ public class MainMenu extends Application {
 		return playStyle;
 	}
 
+			
+	public double MovePaddle(double ballY, double paddleY) {
+		double movement = 0;
+		if (ballY > paddleY + 15) {
+			movement = 10;
+		}
+		else if (ballY < paddleY + 15) {
+			movement = -10;
+		}
+		return movement;
+	}
+			
 	/**
 	 * Start method for the program that titles and displays the stage
 	 */
