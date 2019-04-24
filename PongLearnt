@@ -1,0 +1,86 @@
+					// THIS IS THE SPICY STUFF
+
+
+
+
+					if (playStyle == 3){
+
+						//final int WIDTH = 640;
+
+						//final int HEIGHT = 400;
+
+						JFrame frame;
+
+						//Pane panel;
+
+
+
+						// Setup neural network
+
+						final int genomes_per_generation = 3;
+
+						final int neurons_amount[] = {2, 2, 1};
+
+						final NeuralNetwork nn = new NeuralNetwork(neurons_amount, genomes_per_generation, 0.5, -1, 1);
+
+						final double inputs[] = new double[2];
+
+						double outputs[] = new double[1];
+
+						frame = new JFrame("Pong");
+
+						frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+						frame.setResizable(false);
+
+						//panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+
+						// frame.add(panel);
+
+						frame.pack();
+
+						frame.setLocationRelativeTo(null);
+
+						frame.setVisible(true);
+
+
+						// Get the inputs from the game and the output from the neural network
+
+						
+						ball.getCenterX();
+						ball.getCenterY();
+						
+						player2.getLayoutX();
+						player2.getLayoutY();
+						inputs[0] = ball.getCenterY();
+
+						inputs[1] = player2.getLayoutY();
+
+						outputs = nn.getOutputs(inputs);
+
+
+
+						// Do an action according to the output value
+
+						if(outputs[0] > 0.5) {
+
+							if (player2.getLayoutY() > 1) {
+
+								player2.setLayoutY(player2.getLayoutY() + 15);
+
+							}
+
+							if (player2.getLayoutY() < 320) {
+
+								player2.setLayoutY(player2.getLayoutY() - 15);
+
+							}
+						
+
+					
+
+					// Get the fitness of the current genome, then create a new genome
+
+					nn.newGenome(getScorePlayer2());
+						
+					}
