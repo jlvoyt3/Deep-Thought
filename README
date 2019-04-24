@@ -1,5 +1,7 @@
 //SE 300 Deep Learning Pong ReadMe
 
+//To run the game the user must run MainMenu.java
+
 //MainMenu creates the game, handles game functionality, and runs the game
 //InstructionsOptions creates a method for the HelpPage
 //HelpPage includes the instructions for pong and utilizes the InstrucitonsOptions method
