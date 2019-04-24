@@ -24,24 +24,80 @@ import javafx.util.Duration;
  */
 public class MainMenu extends Application {
 
-	//
+	/**
+	 *  creates an object of score
+	 */
 	Score scoreScore = new Score();
 
+	/**
+	 *  player1 and player 2 create rectangles for the players paddles
+	 *  lowerBorder and lowerColor creates rectangles so we can change the colors of the game
+	 */
 	Rectangle player1,player2,lowerBorder,lowerColor;
-	// paddle size
+	
+	/**
+	 *  sets the normal paddle height
+	 */
 	int paddleHeight = 80;
+	
+	/**
+	 *  creates the ball
+	 */
 	Circle ball;
+	
+	/**
+	 *  creates the text for player 1's score
+	 */
 	Text score1;
+	
+	/**
+	 *  creates the text for player 2's score
+	 */
 	Text score2;
+	
+	/**
+	 *  sets the width and height for the screen and is used to set the layout for the ball and paddles
+	 */
 	int WIDTH = 1000, HEIGHT = 400;
+	
+	/**
+	 *  sets the starting play style as 0 until the player chooses their own style
+	 */
 	int playStyle = 0;
+	
+	/**
+	 *  creates the variables and sets the initial speeds
+	 */
 	int speedX = 0, speedY = 0, dx = speedX, dy = speedY, scorePlayer1 = 0, scorePlayer2 = 0, winner = 0;
+	
+	/**
+	 *  creates gameover which is false until one player wins
+	 */
 	boolean gameOver = false;
+	
+	/**
+	 *  creates and sets initial difficulty value
+	 */
 	int playDifficulty = 0;
+	
+	/**\
+	 *  creates the int for current time in the game
+	 */
 	int currentGameTime;
+	
+	/**
+	 *  creates int for the end game time
+	 */
 	int finalGameTime;
-	String nameEntered;
+	
+	/**
+	 *  creates int to tell us which player won
+	 */
 	int winnerPlayer;
+	
+	/**
+	 *  creates int to store losing player's score
+	 */
 	int loserScore;
 	//
 
@@ -50,14 +106,29 @@ public class MainMenu extends Application {
 	 */
 	Stage stage = new Stage();
 
+	/**
+	 * creates the stage for the game over window
+	 */
 	Stage gameOverStage = new Stage();
+	
+	/**
+	 * creates the pane for the game over pane
+	 */
 	Pane gameOverPane = new Pane();
+	
+	/**
+	 *  creates the scene for the game over window and sets its parameters
+	 */
 	Scene gameOverScene = new Scene(gameOverPane, 1000, 600);
 
 	/**
 	 * create pane for the main menu
 	 */
 	Pane mainPane = new Pane();
+	
+	/**
+	 * creates the scene for the main menu and sets its parameters
+	 */
 	Scene mainScene = new Scene(mainPane, 1000, 600);
 
 	/**
@@ -77,8 +148,9 @@ public class MainMenu extends Application {
 	 * creates and contains the features and functionality of the main menu, options menu, and help menu
 	 */
 	public MainMenu() {
-
+		
 		mainPane.setStyle("-fx-background: #16A500");
+		
 		/**
 		 * set details of newGameButton
 		 */
@@ -195,15 +267,18 @@ public class MainMenu extends Application {
 		});
 
 		/**
-		 * set action of startButton to display gameScene
+		 * set action of backbutton to go back to the main menu
 		 */
-
 		backButton.setOnAction(e-> {
 
 			mainPane.getChildren().removeAll(pickPlayers, pickDifficulty, title, backButton, startGameButton, notifyPlayer);
 			mainPane.getChildren().addAll(startButton, helpButton, text);
 		});
 
+
+		/**
+		 * set action of startButton to display gameScene
+		 */
 		startGameButton.setOnAction(e->{
 
 			if ( pickPlayers.getValue() == null || pickDifficulty.getValue() == null) {
@@ -269,14 +344,22 @@ public class MainMenu extends Application {
 						}
 					});
 				}
+				
+				
 				mainPane.setMaxSize(WIDTH, HEIGHT);
 				mainPane.setStyle("-fx-background-color: #86DB64");
 
 
+				/**
+				 * creates and sets the rectangles color for the screen color
+				 */
 				lowerColor = new Rectangle(1000,200, Color.GREEN);
 				lowerColor.setLayoutX(0);
 				lowerColor.setLayoutY(405);
 
+				/**
+				 * creates and sets the rectangles color for the border
+				 */
 				lowerBorder = new Rectangle(1000,10, Color.BLACK);
 				lowerBorder.setLayoutX(0);
 				lowerBorder.setLayoutY(400);
@@ -293,6 +376,9 @@ public class MainMenu extends Application {
 					paddleHeight = 40;
 				}
 
+				/**
+				 *  creates and sets the paddle rectangles colors and sizes
+				 */
 				player1 = new Rectangle(10,paddleHeight, Color.BLACK);
 				player2 = new Rectangle(10,paddleHeight, Color.BLACK);
 
@@ -302,11 +388,16 @@ public class MainMenu extends Application {
 				player2.setLayoutX(WIDTH-10);
 				player2.setLayoutY(HEIGHT/2-40);
 
+				/**
+				 *  creates the ball
+				 */
 				ball = new Circle(5);
 				ball.setFill(Color.BLACK);
 				ball.setLayoutX(WIDTH/2);
 				ball.setLayoutY(HEIGHT/2);
-
+				/**
+				 *  creates the scores for both players
+				 */
 				score1 = new Text();
 				score1.setLayoutX(100);
 				score1.setLayoutY(500);
@@ -320,10 +411,14 @@ public class MainMenu extends Application {
 				score2.setFont(new Font(20));
 				score2.setText("Player 2's Score: 0");
 				score2.setWrappingWidth(158);
-
+				/**
+				 *  places the help button
+				 */
 				helpButton.setLayoutX(425);
 				helpButton.setLayoutY(450);
-
+				/**
+				 *  adds all the things to the pane
+				 */
 				mainPane.getChildren().addAll(player1,player2,ball,lowerBorder,lowerColor,score1,score2,helpButton);
 
 				displayGameTime();
@@ -381,7 +476,7 @@ public class MainMenu extends Application {
 						mainPane.getChildren().add(score1);
 					}
 
-					if (y <= 0) {
+					if (y <= 0) {		// if the ball hits the 
 						dy = speedY;
 					}
 
@@ -405,11 +500,18 @@ public class MainMenu extends Application {
 				//
 			}});
 	}
+	/**
+	 * sets playStyle
+	 * @param x int playStyle
+	 */
 
 	public void setPlayStyle(int x) {
 		playStyle = x;
 	}
-
+	/**
+	 * returns playStyle
+	 * @return playStyle
+	 */
 	public int getPlayStyle() {
 		return playStyle;
 	}
@@ -425,7 +527,9 @@ public class MainMenu extends Application {
 		}
 		return movement;
 	}
-
+	/**
+	 * sets the time
+	 */
 	public void displayGameTime() {
 		//
 		currentGameTime = 0;
@@ -456,28 +560,45 @@ public class MainMenu extends Application {
 		timelineTime.play();
 		finalGameTime = currentGameTime;
 	}
-
+	/**
+	 * get finalGameTime
+	 * @return finalGameTime
+	 */
 	public int getFinalGameTime() {
 		//get final game time
 		return finalGameTime;
 	}
-
+	/**
+	 * get final score for player 1
+	 * @return scorePlayer1
+	 */
 	public int getFinalScore1() {
 		return scorePlayer1;
 	}
-
+	/**
+	 * get final score for player 2
+	 * @return scorePlayer2
+	 */
 	public int getFinalScore2() {
 		return scorePlayer2;
 	}
-
+	/**
+	 * get winnerPlayer
+	 * @return winnerPlayer
+	 */
 	public int getWinner() {
 		return winnerPlayer;
 	}
-	
+	/**
+	 * get loser Score
+	 * @return loserScore
+	 */
 	public int getLoserScore() {
 		return loserScore;
 	}
-
+	/**
+	 * displays the winner
+	 */
 	public void displayWinner() {
 		//display winner
 		gameOver = true;
@@ -502,7 +623,9 @@ public class MainMenu extends Application {
 		win1.setText("Player " + winnerPlayer + " WINS!");
 		gameOverPane.getChildren().add(win1);
 	}
-
+	/**
+	 * displays the highscores
+	 */
 	public void displayHighscore() {
 		//create timeline to let time catch up
 		Timeline timelineTime = new Timeline();
@@ -592,7 +715,9 @@ public class MainMenu extends Application {
 		//add the text boxes and logo to the pane
 		gameOverPane.getChildren().addAll(textYourInfo, textYourName, textYourScore, textYourMissedClicks, textYourStyle);
 	}
-	
+	/**
+	 * creates the game over stage
+	 */
 	public void createGameOverStage() {
 		stage.close();
 		displayWinner();
@@ -614,7 +739,10 @@ public class MainMenu extends Application {
 		stage.sizeToScene();
 		stage.show();
 	}
-
+	/**
+	 * main it just works
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
