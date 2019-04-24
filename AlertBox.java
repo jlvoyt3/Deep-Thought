@@ -1,4 +1,3 @@
-package thepackage;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.layout.*;
@@ -8,7 +7,16 @@ import javafx.geometry.*;
 
 public class AlertBox {
 	
+	/**
+	 * prevents the user from hitting start if they havent chosen a play style and difficulty
+	 * @param title title of stage
+	 * @param message alert message displayed by alert box
+	 */
 	public static void display(String title, String message) {
+		
+		/**
+		 * creates stage called window for the alertbox to use
+		 */
 		Stage window = new Stage();
 		
 		window.initModality(Modality.APPLICATION_MODAL);
@@ -29,6 +37,4 @@ public class AlertBox {
 		window.setScene(scene);
 		window.showAndWait();
 	}
-	
-	
 }

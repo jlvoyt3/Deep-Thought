@@ -7,10 +7,10 @@
 public class InstructionsOptions {
 
 	/**
+	 * creates the instructions text for the help screen
 	 * @return returns instructionsText which is used by the MainMenu.java
 	 */
 	public String instructions(){
-
 		/**
 		 * instructionsText is a String variable that contains the text about the instructions for the game for the help menu
 		 */
@@ -33,6 +33,7 @@ public class InstructionsOptions {
 	}
 
 	/**
+	 * creates the options text for the help screen
 	 * @return returns optionsText which is used by the MainMenu.java file
 	 */
 	public String options() {
