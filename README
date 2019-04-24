@@ -1,9 +1,8 @@
-//SE 300 Code Repository
+//SE 300 Deep Learning Pong ReadMe
 
-//MainMenu contains the bulk of the code, it is responsible for creating the GUI and running most of the pong game
+//MainMenu creates the game, handles game functionality, and runs the game
 //InstructionsOptions creates a method for the HelpPage
-//HelpPage includes the instructions for pong and utiliezes the InstrucitonsOptions method
-//IterationTracker  tracks each iteration of the AI's learning algorithim
-//AlertBox creates a method for mainMenu so that users are prompted when trying to start the game without picking their options
-//ScorePage creates the stage and scene for checking the top scores, it also tracks and determines a user's score
-//Iterations of the AI will be tracked using the Iteration Tracker
+//HelpPage includes the instructions for pong and utilizes the InstrucitonsOptions method
+//AlertBox is used for the drop down menus in the game options screen
+//Score sorts the list of scores to find the best and writes the game data from the game just played
+//Deep_Learning_Pong_Highscores.txt stores the game scores data
