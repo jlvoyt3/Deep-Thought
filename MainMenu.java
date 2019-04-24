@@ -24,10 +24,8 @@ import javafx.util.Duration;
  */
 public class MainMenu extends Application {
 
-	//change size of panes
-
 	//
-
+	Score scoreScore = new Score();
 
 	Rectangle player1,player2,lowerBorder,lowerColor;
 	// paddle size
@@ -38,22 +36,29 @@ public class MainMenu extends Application {
 	int WIDTH = 1000, HEIGHT = 400;
 	int playStyle = 0;
 	int speedX = 0, speedY = 0, dx = speedX, dy = speedY, scorePlayer1 = 0, scorePlayer2 = 0, winner = 0;
+	boolean gameOver = false;
+	int playDifficulty = 0;
+	int currentGameTime;
+	int finalGameTime;
+	String nameEntered;
+	int winnerPlayer;
+	int loserScore;
 	//
 
 	/**
 	 * create the stage for the main menu
 	 */
 	Stage stage = new Stage();
-	
-	
+
+	Stage gameOverStage = new Stage();
+	Pane gameOverPane = new Pane();
+	Scene gameOverScene = new Scene(gameOverPane, 1000, 600);
+
 	/**
 	 * create pane for the main menu
 	 */
 	Pane mainPane = new Pane();
 	Scene mainScene = new Scene(mainPane, 1000, 600);
-
-	Pane optionsPane = new Pane();
-
 
 	/**
 	 * create Text for the game name
@@ -67,10 +72,6 @@ public class MainMenu extends Application {
 	 * create button for the help menu
 	 */
 	private Button helpButton = new Button("Instructions");
-	/**
-	 * create button to display the top scores
-	 */
-	private Button scoreButton = new Button("Top Scores");
 
 	/**
 	 * creates and contains the features and functionality of the main menu, options menu, and help menu
@@ -92,13 +93,6 @@ public class MainMenu extends Application {
 		helpButton.setLayoutY(300);
 		helpButton.setFont( new Font(24));
 
-		/**
-		 * set details of scoreButton
-		 */
-		scoreButton.setLayoutX(405);
-		scoreButton.setLayoutY(400);
-		scoreButton.setFont( new Font(24));
-
 		/** 
 		 * set main menu title text
 		 */
@@ -111,7 +105,7 @@ public class MainMenu extends Application {
 		/**
 		 * add newGameButton, helpButton, scoreButton, and text to the pane
 		 */
-		mainPane.getChildren().addAll(startButton, helpButton, scoreButton, text);
+		mainPane.getChildren().addAll(startButton, helpButton, text);
 
 		/**
 		 * create and format title text for the options menu
@@ -160,9 +154,6 @@ public class MainMenu extends Application {
 		pickPlayers.setLayoutX(220);
 		pickPlayers.setLayoutY(300);
 		pickPlayers.setPromptText("Choose Game Type");
-		
-
-
 
 		/**
 		 * create and format combo box/drop down box to choose difficulty
@@ -178,18 +169,22 @@ public class MainMenu extends Application {
 		pickDifficulty.setPromptText("Choose Difficulty");
 
 		/**
-		 * create and format combo box/drop down box to choose AI
+		 * text box to inform player that only hard difficulty stores score
 		 */
-
+		Text notifyPlayer = new Text();
+		notifyPlayer.setText("Only 'Hard' difficulty will store your score!");
+		notifyPlayer.setLayoutX(690);
+		notifyPlayer.setLayoutY(315);
+		notifyPlayer.setFont(new Font(14));
 
 		/**
 		 * set action for newGameButton
 		 */
 		startButton.setOnAction(e-> {
-			
-			mainPane.getChildren().removeAll(startButton, helpButton, scoreButton, text);
 
-			mainPane.getChildren().addAll(pickPlayers, pickDifficulty, title, backButton, startGameButton);
+			mainPane.getChildren().removeAll(startButton, helpButton, text);
+
+			mainPane.getChildren().addAll(pickPlayers, pickDifficulty, title, backButton, startGameButton, notifyPlayer);
 		});
 
 		/**
@@ -200,40 +195,28 @@ public class MainMenu extends Application {
 		});
 
 		/**
-		 * set action for scoreButton
-		 */
-		scoreButton.setOnAction(e-> {
-			new ScorePage();
-		});
-
-		/**
 		 * set action of startButton to display gameScene
 		 */
-		
+
 		backButton.setOnAction(e-> {
 
-			mainPane.getChildren().removeAll(pickPlayers, pickDifficulty, title, backButton, startGameButton);
-			mainPane.getChildren().addAll(startButton, helpButton, scoreButton, text);
+			mainPane.getChildren().removeAll(pickPlayers, pickDifficulty, title, backButton, startGameButton, notifyPlayer);
+			mainPane.getChildren().addAll(startButton, helpButton, text);
 		});
-		
+
 		startGameButton.setOnAction(e->{
 
 			if ( pickPlayers.getValue() == null || pickDifficulty.getValue() == null) {
-				
 				AlertBox.display("Error", "You must set your options before the game begins.");
-				
 			} else {
-				
 				if (pickPlayers.getValue() == "Player VS Player") {
-					setPlayStyle(1);
+					playStyle = 1;
 				} else if (pickPlayers.getValue() == "Player VS Traditional AI") {
-					setPlayStyle(2);
+					playStyle = 2;
 				} else if (pickPlayers.getValue() == "Player VS Deep Learning AI") {
-					setPlayStyle(3);
+					playStyle = 3;
 				}
-				
-				int playDifficulty = 0;
-				
+
 				if (pickDifficulty.getValue() == "Easy") {
 					playDifficulty = 1;
 					speedX = 10;
@@ -253,8 +236,8 @@ public class MainMenu extends Application {
 					dx = speedX;
 					dy = speedY;
 				}
-				
-				mainPane.getChildren().removeAll(pickPlayers, pickDifficulty, title, startGameButton);
+
+				mainPane.getChildren().removeAll(pickPlayers, pickDifficulty, title, startGameButton, backButton, notifyPlayer);
 
 				if (playStyle == 1) { //starts full controls for pvp
 					mainScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -299,23 +282,23 @@ public class MainMenu extends Application {
 				lowerBorder.setLayoutY(400);
 
 
-
+				//change based on difficulty
 				if (playDifficulty == 1) {
 					paddleHeight = 80;
-					
+
 				} else if (playDifficulty == 2) {
 					paddleHeight = 60;
-					
+
 				} else if (playDifficulty == 3) {
 					paddleHeight = 40;
 				}
 
 				player1 = new Rectangle(10,paddleHeight, Color.BLACK);
 				player2 = new Rectangle(10,paddleHeight, Color.BLACK);
-				
+
 				player1.setLayoutX(0);
 				player1.setLayoutY(HEIGHT/2-40);
-				
+
 				player2.setLayoutX(WIDTH-10);
 				player2.setLayoutY(HEIGHT/2-40);
 
@@ -337,36 +320,34 @@ public class MainMenu extends Application {
 				score2.setFont(new Font(20));
 				score2.setText("Player 2's Score: 0");
 				score2.setWrappingWidth(158);
-				
+
 				helpButton.setLayoutX(425);
 				helpButton.setLayoutY(450);
 
 				mainPane.getChildren().addAll(player1,player2,ball,lowerBorder,lowerColor,score1,score2,helpButton);
-				
+
 				displayGameTime();
 
 				Timeline timelineGame = new Timeline();
 				timelineGame.setCycleCount(Timeline.INDEFINITE);
 				KeyFrame keyframeTargets = new KeyFrame(Duration.seconds(.08), action -> {
-					//
 					//gameUpdate
-					double x = ball.getLayoutX(), y = ball.getLayoutY();
+					double x = ball.getLayoutX();
+					double y = ball.getLayoutY();
 
-					if (getPlayStyle() == 2) {
+					//traditional ai bot
+					if (playStyle == 2) {
 						player2.setLayoutY(MovePaddle(ball.getLayoutY(),player2.getLayoutY())+player2.getLayoutY());
 					}
-					
+
 					//Move ball
 					if (x <=10 && x > -10 && y > player1.getLayoutY() && y < player1.getLayoutY()+80) {
 						dx = speedX;
-						//Player2 score
 					} else if (ball.getLayoutX() < -10) {
 						player1.setLayoutY(HEIGHT/2-40);
 						player2.setLayoutY(HEIGHT/2-40);
 						ball.setLayoutX(WIDTH/2);
 						ball.setLayoutY(HEIGHT/2);
-						//speedX = 20;
-						//speedY = 20;
 						scorePlayer2++;
 
 						//remove old score
@@ -383,14 +364,11 @@ public class MainMenu extends Application {
 					if(x >= WIDTH-10 && x < WIDTH+10 && y > player2.getLayoutY() && y< player2.getLayoutY()+80) {
 						speedX++;
 						dx = -speedX;
-						//Player1 score
 					} else if (ball.getLayoutX() > 1010) {
 						player1.setLayoutY(HEIGHT/2-40);
 						player2.setLayoutY(HEIGHT/2-40);
 						ball.setLayoutX(WIDTH/2);
 						ball.setLayoutY(HEIGHT/2);
-						//speedX = 20;
-						//speedY = 20;
 						scorePlayer1++;
 
 						//remove old score
@@ -411,40 +389,10 @@ public class MainMenu extends Application {
 						dy = -speedY;
 					}
 
-					//end game
-					if (scorePlayer1 == 10) {
-						player1.setLayoutY(HEIGHT/2-40);
-						player2.setLayoutY(HEIGHT/2-40);
-						ball.setLayoutX(WIDTH/2);
-						ball.setLayoutY(HEIGHT/2);
-						speedX = 0;
-						speedY = 0;
-						mainPane.getChildren().removeAll(ball, score1, score2, player1, player2, helpButton);
-						Text win1 = new Text();
-	                    win1.setLayoutX(400);
-	                    win1.setLayoutY(200);
-	                   // win1.setWrappingWidth(183);
-	            		win1.setFont(Font.font ("Gill Sans Ultra Bold", 28) );
-	                    win1.setText("Player 1 WINS!");
-	                    mainPane.getChildren().add(win1);
-						winner = 1;
-					}
-					if (scorePlayer2 == 10) {
-						player1.setLayoutY(HEIGHT/2-40);
-						player2.setLayoutY(HEIGHT/2-40);
-						ball.setLayoutX(WIDTH/2);
-						ball.setLayoutY(HEIGHT/2);
-						speedX = 0;
-						speedY = 0;
-						mainPane.getChildren().removeAll(ball, score1, score2, player1, player2, helpButton);
-						Text win2 = new Text();
-	                    win2.setLayoutX(400);
-	                    win2.setLayoutY(200);
-	                   // win2.setWrappingWidth(183);
-	            		win2.setFont(Font.font ("Gill Sans Ultra Bold", 28) );
-	                    win2.setText("Player 2 WINS!");
-	                    mainPane.getChildren().add(win2);
-						winner = 2;
+					//end game and determine winner
+					if (scorePlayer1 == 10 || scorePlayer2 == 10) {
+						timelineGame.stop();
+						createGameOverStage();
 					}
 
 					ball.setLayoutX(ball.getLayoutX()+dx);
@@ -458,26 +406,15 @@ public class MainMenu extends Application {
 			}});
 	}
 
-	/**
-	 * Start method for the program that titles and displays the stage
-	 */
-	public void start(Stage stage) {
-
-		stage.setScene(mainScene);
-		stage.setTitle("Deep Learning Pong");
-		stage.setResizable(false);
-		stage.sizeToScene();
-		stage.show();
-
-	}
 	public void setPlayStyle(int x) {
 		playStyle = x;
 	}
-	
+
 	public int getPlayStyle() {
 		return playStyle;
 	}
-	
+
+	//for ai bot
 	public double MovePaddle(double ballY, double paddleY) {
 		double movement = 0;
 		if (ballY > paddleY+15) {
@@ -488,12 +425,10 @@ public class MainMenu extends Application {
 		}
 		return movement;
 	}
-	
+
 	public void displayGameTime() {
-		
-		//create KeepTime variable
-		KeepTime keepTime = new KeepTime();
-		
+		//
+		currentGameTime = 0;
 		//create text box for the countdown timer
 		Text time = new Text();
 		time.setLayoutX(435);
@@ -504,14 +439,180 @@ public class MainMenu extends Application {
 		Timeline timelineTime = new Timeline();
 		timelineTime.setCycleCount(Timeline.INDEFINITE);
 		KeyFrame keyframeTime = new KeyFrame(Duration.seconds(1), action -> {
-			//update with current time left
-			mainPane.getChildren().removeAll(lowerBorder, lowerColor, score1, score2, helpButton, time);
-			time.setText("Game Time: " + keepTime.countTime());
-			mainPane.getChildren().addAll(lowerBorder, lowerColor, score1, score2, helpButton, time);
+			if (gameOver == false) {
+				//update with current time
+				mainPane.getChildren().removeAll(lowerBorder, lowerColor, score1, score2, helpButton, time);
+				currentGameTime++;
+				time.setText("Game Time: " + currentGameTime);
+				mainPane.getChildren().addAll(lowerBorder, lowerColor, score1, score2, helpButton, time);
+				finalGameTime = currentGameTime;
+			} else {
+				mainPane.getChildren().remove(time);
+				finalGameTime = currentGameTime;
+				timelineTime.stop();
+			}
 		});
 		timelineTime.getKeyFrames().add(keyframeTime);
 		timelineTime.play();
-		//
+		finalGameTime = currentGameTime;
+	}
+
+	public int getFinalGameTime() {
+		//get final game time
+		return finalGameTime;
+	}
+
+	public int getFinalScore1() {
+		return scorePlayer1;
+	}
+
+	public int getFinalScore2() {
+		return scorePlayer2;
+	}
+
+	public int getWinner() {
+		return winnerPlayer;
+	}
+	
+	public int getLoserScore() {
+		return loserScore;
+	}
+
+	public void displayWinner() {
+		//display winner
+		gameOver = true;
+		player1.setLayoutY(HEIGHT/2-40);
+		player2.setLayoutY(HEIGHT/2-40);
+		ball.setLayoutX(WIDTH/2);
+		ball.setLayoutY(HEIGHT/2);
+		speedX = 0;
+		speedY = 0;
+		mainPane.getChildren().removeAll(lowerBorder, lowerColor, ball, score1, score2, player1, player2, helpButton);
+		Text win1 = new Text();
+		win1.setLayoutX(400);
+		win1.setLayoutY(150);
+		win1.setFont(Font.font ("Gill Sans Ultra Bold", 28) );
+		if (scorePlayer1 == 10) {
+			winnerPlayer = 1;
+			loserScore = scorePlayer2;
+		} else {
+			winnerPlayer = 2;
+			loserScore = scorePlayer1;
+		}
+		win1.setText("Player " + winnerPlayer + " WINS!");
+		gameOverPane.getChildren().add(win1);
+	}
+
+	public void displayHighscore() {
+		//create timeline to let time catch up
+		Timeline timelineTime = new Timeline();
+		timelineTime.setCycleCount(5);
+		KeyFrame keyframeTime = new KeyFrame(Duration.seconds(.5), action -> {
+		});
+		timelineTime.getKeyFrames().add(keyframeTime);
+		timelineTime.play();
+
+		//if hard difficulty was selected store score then sort
+		if (playDifficulty == 3) {
+			scoreScore.writeScore(this);
+			scoreScore.sortHighscores(this);
+			displayScoresText();
+		} else {
+			displayScoresText();
+		}
+	}
+
+	//display scores
+	public void displayScoresText() {
+		//create text box to display high score
+		//part1
+		Text textHighscore1 = new Text();
+		textHighscore1.setLayoutX(200);
+		textHighscore1.setLayoutY(300);
+		textHighscore1.setFont(new Font(30));
+		textHighscore1.setText("Current Highest Score Stats: ");
+		//part2
+		Text textHighscore2 = new Text();
+		textHighscore2.setLayoutX(200);
+		textHighscore2.setLayoutY(350);
+		textHighscore2.setFont(new Font(25));
+		textHighscore2.setText("Winner: " + scoreScore.getMaxWinner());
+		//part3
+		Text textHighscore3 = new Text();
+		textHighscore3.setLayoutX(200);
+		textHighscore3.setLayoutY(400);
+		textHighscore3.setFont(new Font(25));
+		textHighscore3.setText("Loser's Score: " + scoreScore.getmaxScoreLoser());
+		//part4
+		Text textHighscore4 = new Text();
+		textHighscore4.setLayoutX(200);
+		textHighscore4.setLayoutY(450);
+		textHighscore4.setFont(new Font(25));
+		textHighscore4.setText("Game Time: " + scoreScore.getMaxGameTime());
+		//part5
+		Text textHighscore5 = new Text();
+		textHighscore5.setLayoutX(200);
+		textHighscore5.setLayoutY(500);
+		textHighscore5.setFont(new Font(25));
+		textHighscore5.setText("Play Style: " + scoreScore.getMaxPlayStyle());
+		//add elements for display highest score
+		gameOverPane.getChildren().addAll(textHighscore1, textHighscore2, textHighscore3, textHighscore4, textHighscore5);
+
+		//display your game name, missed, and score
+		//your info
+		Text textYourInfo = new Text();
+		textYourInfo.setLayoutX(600);
+		textYourInfo.setLayoutY(300);
+		textYourInfo.setFont(new Font(30));
+		textYourInfo.setText("Your Game Stats: ");
+		//display your name
+		Text textYourName = new Text();
+		textYourName.setLayoutX(600);
+		textYourName.setLayoutY(350);
+		textYourName.setFont(new Font(25));
+		textYourName.setText("Winner: " + winnerPlayer);
+		//display your game missed clicks
+		Text textYourMissedClicks = new Text();
+		textYourMissedClicks.setLayoutX(600);
+		textYourMissedClicks.setLayoutY(400);
+		textYourMissedClicks.setFont(new Font(25));
+		textYourMissedClicks.setText("Loser's Score: " + loserScore);
+		//display your score
+		Text textYourScore = new Text();
+		textYourScore.setLayoutX(600);
+		textYourScore.setLayoutY(450);
+		textYourScore.setFont(new Font(25));
+		textYourScore.setText("Game Time:  " + finalGameTime);
+		//display your play style
+		Text textYourStyle = new Text();
+		textYourStyle.setLayoutX(600);
+		textYourStyle.setLayoutY(500);
+		textYourStyle.setFont(new Font(25));
+		textYourStyle.setText("Play Style: " + playStyle);
+		//add the text boxes and logo to the pane
+		gameOverPane.getChildren().addAll(textYourInfo, textYourName, textYourScore, textYourMissedClicks, textYourStyle);
+	}
+	
+	public void createGameOverStage() {
+		stage.close();
+		displayWinner();
+		displayHighscore();
+		gameOverPane.setStyle("-fx-background-color: white");
+		gameOverStage.setTitle("Game Over");
+		gameOverStage.setScene(gameOverScene);
+		gameOverStage.show();
+		
+	}
+
+	/**
+	 * Start method for the program that titles and displays the stage
+	 */
+	public void start(Stage stage) {
+		stage.setScene(mainScene);
+		stage.setTitle("Deep Learning Pong");
+		stage.setResizable(false);
+		stage.sizeToScene();
+		stage.show();
 	}
 
 	public static void main(String[] args) {
